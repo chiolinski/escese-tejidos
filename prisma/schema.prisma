@@ -1,0 +1,187 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum PaymentState {
+  PENDING
+  PAID
+  REJECTED
+  CANCELLED
+  FAILED
+}
+
+model Category {
+  id       String    @id @default(cuid())
+  slug     String    @unique
+  name     String
+  products Product[]
+}
+
+model Product {
+  id          String           @id @default(cuid())
+  slug        String           @unique
+  name        String
+  description String
+  materials   String
+  care        String
+  price       Int
+  madeToOrder Boolean          @default(false)
+  leadTime    String?
+  featured    Boolean          @default(false)
+  published   Boolean          @default(false)
+  demo        Boolean          @default(false)
+  createdAt   DateTime         @default(now())
+  categoryId  String
+  category    Category         @relation(fields: [categoryId], references: [id])
+  images      ProductImage[]
+  variants    ProductVariant[]
+
+  @@index([published, categoryId, createdAt])
+}
+
+model ProductImage {
+  id        String  @id @default(cuid())
+  url       String
+  alt       String
+  position  Int     @default(0)
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId, position])
+}
+
+model ProductVariant {
+  id        String      @id @default(cuid())
+  color     String      @default("")
+  size      String      @default("")
+  productId String
+  product   Product     @relation(fields: [productId], references: [id])
+  inventory Inventory?
+  items     OrderItem[]
+
+  @@unique([productId, color, size])
+}
+
+model Inventory {
+  variantId String         @id
+  available Int            @default(0)
+  variant   ProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
+}
+
+model Customer {
+  id     String  @id @default(cuid())
+  name   String
+  email  String
+  phone  String
+  orders Order[]
+}
+
+model Order {
+  id          String              @id
+  sessionId   String              @unique
+  total       Int
+  shipping    Int
+  state       PaymentState        @default(PENDING)
+  createdAt   DateTime            @default(now())
+  customerId  String
+  customer    Customer            @relation(fields: [customerId], references: [id])
+  items       OrderItem[]
+  payment     PaymentTransaction?
+  shipment    Shipment?
+
+  @@index([state, createdAt])
+}
+
+model OrderItem {
+  id        String         @id @default(cuid())
+  name      String
+  price     Int
+  quantity  Int
+  reserved  Boolean
+  orderId   String
+  order     Order          @relation(fields: [orderId], references: [id])
+  variantId String
+  variant   ProductVariant @relation(fields: [variantId], references: [id])
+
+  @@index([orderId])
+}
+
+model PaymentTransaction {
+  orderId           String  @id
+  order             Order   @relation(fields: [orderId], references: [id])
+  token             String  @unique
+  providerStatus    String?
+  responseCode      Int?
+  authorizationCode String?
+}
+
+model Shipment {
+  orderId String  @id
+  order   Order   @relation(fields: [orderId], references: [id])
+  pickup  Boolean
+  region  String?
+  comuna  String?
+  address String?
+  notes   String?
+  status  String  @default("PENDING")
+}
+
+model ShippingZone {
+  id     String @id @default(cuid())
+  region String
+  comuna String
+  price  Int
+
+  @@unique([region, comuna])
+}
+
+model StoreSettings {
+  id        Int     @id @default(1)
+  name      String  @default("Escese Tejidos")
+  contact   String  @default("")
+  instagram String  @default("tejidos_de_scarleth")
+  pickup    Boolean @default(false)
+  shipping  String  @default("")
+  returns   String  @default("")
+  terms     String  @default("")
+  privacy   String  @default("")
+}
+
+model AdminUser {
+  id           String         @id @default(cuid())
+  email        String         @unique
+  passwordHash String
+  sessions     AdminSession[]
+  audit        AuditLog[]
+}
+
+model AdminSession {
+  hash      String    @id
+  expiresAt DateTime
+  adminId   String
+  admin     AdminUser @relation(fields: [adminId], references: [id], onDelete: Cascade)
+}
+
+model AuditLog {
+  id        String    @id @default(cuid())
+  adminId   String
+  admin     AdminUser @relation(fields: [adminId], references: [id])
+  action    String
+  target    String
+  createdAt DateTime  @default(now())
+}
+
+model RateLimit {
+  key       String   @id
+  count     Int
+  expiresAt DateTime
+}
+model Media {
+  id    String @id @default(cuid())
+  mime  String
+  bytes Bytes
+}

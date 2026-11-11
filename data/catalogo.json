@@ -1,0 +1,129 @@
+[
+  {
+    "slug": "cuello-morado",
+    "name": "Cuello morado",
+    "category": "cuellos",
+    "description": "Tejido morado con relieve en filas horizontales.",
+    "images": [
+      "/productos/tejido-03.jpeg"
+    ]
+  },
+  {
+    "slug": "cuello-jaspeado-rosa",
+    "name": "Cuello jaspeado rosa",
+    "category": "cuellos",
+    "description": "Cuello cruzado en tonos rosa y gris con botón floral.",
+    "images": [
+      "/productos/tejido-00.jpeg"
+    ]
+  },
+  {
+    "slug": "cuello-jaspeado-violeta",
+    "name": "Cuello jaspeado violeta",
+    "category": "cuellos",
+    "description": "Cuello cruzado en tonos violeta y rosa con botón redondo.",
+    "images": [
+      "/productos/tejido-01.jpeg"
+    ]
+  },
+  {
+    "slug": "cuello-verde-agua",
+    "name": "Cuello verde agua",
+    "category": "cuellos",
+    "description": "Cuello cruzado con franjas en verde agua, gris y verde.",
+    "images": [
+      "/productos/tejido-02.jpeg"
+    ]
+  },
+  {
+    "slug": "cuello-punto-calado",
+    "name": "Cuello de punto calado",
+    "category": "cuellos",
+    "description": "Cuello tejido en tono claro con filas caladas.",
+    "images": [
+      "/productos/tejido-07.jpeg",
+      "/productos/tejido-04.jpeg"
+    ]
+  },
+  {
+    "slug": "cuello-marino-con-boton",
+    "name": "Cuello marino con botón",
+    "category": "cuellos",
+    "description": "Cuello cruzado jaspeado en azul marino y blanco.",
+    "images": [
+      "/productos/tejido-05.jpeg"
+    ]
+  },
+  {
+    "slug": "cuello-claro-con-boton",
+    "name": "Cuello claro con botón",
+    "category": "cuellos",
+    "description": "Cuello cruzado en tono claro con un botón redondo.",
+    "images": [
+      "/productos/tejido-06.jpeg"
+    ]
+  },
+  {
+    "slug": "gorro-acanalado-oscuro",
+    "name": "Gorro acanalado oscuro",
+    "category": "gorros",
+    "description": "Gorro tejido de relieve vertical con borde doblado.",
+    "images": [
+      "/productos/tejido-08.jpeg"
+    ]
+  },
+  {
+    "slug": "cuello-circular-oscuro",
+    "name": "Cuello circular oscuro",
+    "category": "cuellos",
+    "description": "Cuello circular tejido con textura horizontal.",
+    "images": [
+      "/productos/tejido-09.jpeg"
+    ]
+  },
+  {
+    "slug": "cuello-acanalado-oscuro",
+    "name": "Cuello acanalado oscuro",
+    "category": "cuellos",
+    "description": "Cuello tejido con canales marcados.",
+    "images": [
+      "/productos/tejido-10.jpeg"
+    ]
+  },
+  {
+    "slug": "bufanda-acanalada-oscura",
+    "name": "Bufanda acanalada oscura",
+    "category": "bufandas",
+    "description": "Pieza alargada de punto acanalado en tono oscuro.",
+    "images": [
+      "/productos/tejido-11.jpeg"
+    ]
+  },
+  {
+    "slug": "cuello-azul",
+    "name": "Cuello azul",
+    "category": "cuellos",
+    "description": "Cuello azul de punto con relieve horizontal.",
+    "images": [
+      "/productos/tejido-12.jpeg"
+    ]
+  },
+  {
+    "slug": "cintillo-azul-cruzado",
+    "name": "Cintillo azul cruzado",
+    "category": "cintillos",
+    "description": "Pieza azul tejida con un cruce central.",
+    "images": [
+      "/productos/tejido-13.jpeg"
+    ]
+  },
+  {
+    "slug": "gorro-mostaza",
+    "name": "Gorro mostaza",
+    "category": "gorros",
+    "description": "Gorro de punto acanalado en mostaza con borde doblado.",
+    "images": [
+      "/productos/tejido-14.jpeg"
+    ]
+  }
+]
