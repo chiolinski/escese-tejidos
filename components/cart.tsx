@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { ShoppingBag } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { clp } from '@/lib/store'
@@ -20,6 +20,35 @@ export const useCart = create<Cart>()(persist(set => ({
     lines: lines.flatMap(item => item.variantId !== id ? [item] : quantity > 0 ? [{ ...item, quantity: Math.min(quantity, item.max) }] : []),
   })),
 }), { name: 'escese-carrito' }))
+
+type PurchasedLine = Pick<Line, 'variantId' | 'quantity'>
+const checkoutKey = 'escese-checkout'
+
+export function rememberCheckout(receipt: string, items: PurchasedLine[]) {
+  try {
+    sessionStorage.setItem(checkoutKey, JSON.stringify({ receipt, items }))
+  } catch {
+    // Browser storage can be unavailable. Payment can still proceed.
+  }
+}
+
+export function ClearPurchasedItems({ receipt }: { receipt: string }) {
+  useEffect(() => {
+    try {
+      const saved = JSON.parse(sessionStorage.getItem(checkoutKey) ?? 'null') as { receipt: string; items: PurchasedLine[] } | null
+      if (saved?.receipt !== receipt || !Array.isArray(saved.items)) return
+      sessionStorage.removeItem(checkoutKey)
+      const cart = useCart.getState()
+      for (const item of saved.items) {
+        const line = cart.lines.find(current => current.variantId === item.variantId)
+        if (line && Number.isInteger(item.quantity) && item.quantity > 0) cart.change(item.variantId, line.quantity - item.quantity)
+      }
+    } catch {
+      // The receipt remains available even when the browser blocks storage.
+    }
+  }, [receipt])
+  return null
+}
 
 export function CartLink() {
   const count = useCart(state => state.lines.reduce((sum, line) => sum + line.quantity, 0))

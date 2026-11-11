@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { db } from '@/lib/db'
+import { ClearPurchasedItems } from '@/components/cart'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = { robots: { index: false } }
@@ -19,5 +20,5 @@ export default async function PaymentPage({ params, searchParams }: { params: Pr
     ? await db.order.findUnique({ where: { sessionId: comprobante }, select: { state: true } })
     : null
   const message = status === 'paid' && order?.state !== 'PAID' ? titles.error : titles[status] || titles.error
-  return <section className="shell section"><h1>{message}</h1><Link className="button mt-8" href="/tienda">Volver a la tienda</Link></section>
+  return <section className="shell section">{order?.state === 'PAID' && typeof comprobante === 'string' && <ClearPurchasedItems receipt={comprobante} />}<h1>{message}</h1><Link className="button mt-8" href="/tienda">Volver a la tienda</Link></section>
 }

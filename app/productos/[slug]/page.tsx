@@ -12,7 +12,11 @@ type Props = { params: Promise<{ slug: string }> }
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const product = (await catalogProducts()).find(item => item.slug === slug)
-  return product ? { title: product.name, description: product.description } : {}
+  return product ? {
+    title: product.name,
+    description: product.description,
+    openGraph: { title: product.name, description: product.description, images: product.images.slice(0, 1) },
+  } : {}
 }
 
 export default async function Product({ params }: Props) {
@@ -21,7 +25,23 @@ export default async function Product({ params }: Props) {
   const product = products.find(item => item.slug === slug)
   if (!product) notFound()
   const related = products.filter(item => item.category === product.category && item.slug !== slug).slice(0, 3)
+  const base = process.env.APP_URL
+  const structured = base && !product.demo && product.price !== null ? {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.name,
+    description: product.description,
+    image: product.images.map(image => new URL(image, base).href),
+    offers: {
+      '@type': 'Offer',
+      url: new URL('/productos/' + product.slug, base).href,
+      price: product.price,
+      priceCurrency: 'CLP',
+      availability: 'https://schema.org/' + (product.madeToOrder ? 'PreOrder' : product.available ? 'InStock' : 'OutOfStock'),
+    },
+  } : null
   return <section className="shell section">
+    {structured && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structured).replace(/</g, '\\u003c') }} />}
     <Link href="/tienda" className="mb-6 inline-block underline">Volver a la tienda</Link>
     <div className="grid gap-8 md:grid-cols-2">
       <div className="grid gap-4">{product.images.map((image, index) => <div key={image} className="relative aspect-square bg-[#efe8f6]"><Image src={image} alt={product.name + (index ? ' · Vista adicional' : '')} fill sizes="(min-width: 760px) 50vw, 100vw" className="object-contain" /></div>)}</div>

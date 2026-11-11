@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
-import { useCart } from './cart'
+import { rememberCheckout, useCart } from './cart'
 import { clp } from '@/lib/store'
 
 type Fields = { name: string; email: string; phone: string; delivery: string; address: string; notes: string }
@@ -15,7 +15,7 @@ export function CheckoutForm({ zones, canPickup }: { zones: { region: string; co
   })
   const [quote, setQuote] = useState<Quote>()
   const [error, setError] = useState('')
-  const [payment, setPayment] = useState<{ url: string; token: string }>()
+  const [payment, setPayment] = useState<{ url: string; token: string; receipt: string }>()
   const delivery = useWatch({ control, name: 'delivery' })
   const pickup = delivery === 'pickup'
   const items = lines.map(({ variantId, quantity }) => ({ variantId, quantity }))
@@ -42,7 +42,7 @@ export function CheckoutForm({ zones, canPickup }: { zones: { region: string; co
     }
   })
   if (!lines.length) return <p className="mt-6">Agrega una pieza al carrito para continuar.</p>
-  if (payment) return <form className="mt-8" action={payment.url} method="post">
+  if (payment) return <form className="mt-8" action={payment.url} method="post" onSubmit={() => rememberCheckout(payment.receipt, items)}>
     <input type="hidden" name="token_ws" value={payment.token} />
     <button className="button">Continuar en Webpay</button>
   </form>

@@ -7,6 +7,7 @@ import { CartLink } from '@/components/cart'
 import './globals.css'
 
 export const metadata: Metadata = {
+  metadataBase: process.env.APP_URL ? new URL(process.env.APP_URL) : undefined,
   title: { default: 'Escese Tejidos | Tejidos hechos a mano en Quirihue', template: '%s | Escese Tejidos' },
   description: 'Descubre tejidos y accesorios hechos a mano en Quirihue, Región de Ñuble, Chile.',
   openGraph: { type: 'website', locale: 'es_CL', siteName: 'Escese Tejidos' },

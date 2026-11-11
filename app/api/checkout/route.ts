@@ -39,7 +39,7 @@ export async function POST(request: Request) {
       await finishOrder(order.id, 'FAILED')
       return Response.json({ error: 'No fue posible registrar la transacción.' }, { status: 500 })
     }
-    return Response.json({ url: payment.url, token: payment.token })
+    return Response.json({ url: payment.url, token: payment.token, receipt: order.sessionId })
   } catch (error) {
     if (error instanceof CheckoutError) return Response.json({ error: error.message }, { status: 409 })
     return Response.json({ error: 'No fue posible procesar la compra.' }, { status: 500 })
